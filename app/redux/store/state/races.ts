@@ -14,12 +14,14 @@ export type RacesDataType = {
 export const fetchRacesHistory = createAsyncThunk(
   'racesData/fetchRacesHistory',
   async driverId => {
-    console.log('this is id', driverId);
-    const response = await axios(
-      `https://ergast.com/api/f1/drivers/${driverId}/results.json`,
-    );
-    console.log(response.data);
-    return response.data;
+    try {
+      const response = await axios(
+        `https://ergast.com/api/f1/drivers/${driverId}/results.json`,
+      );
+      return response.data;
+    } catch (err) {
+      console.log(err);
+    }
   },
 );
 

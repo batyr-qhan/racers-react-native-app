@@ -12,6 +12,7 @@ import {RootStackParamList} from '../../App';
 import {fetchRacers} from '../redux/store/state/racers';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../redux/store/store';
+import {RACERS_PER_PAGE} from '../constants';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -44,8 +45,8 @@ function HomeScreen({navigation}: Props) {
       </View>
 
       <FlatList
-        style={{marginVertical: 16}}
-        data={racers}
+        style={styles.list}
+        data={racers?.MRData?.DriverTable?.Drivers}
         renderItem={item => (
           <View style={styles.listItem}>
             <View>
@@ -70,6 +71,7 @@ function HomeScreen({navigation}: Props) {
 
       <View style={styles.bottomPanel}>
         <Button
+          disabled={currentPage === 0}
           title="Prev"
           onPress={() => {
             if (currentPage > 0) {
@@ -78,9 +80,16 @@ function HomeScreen({navigation}: Props) {
           }}
         />
 
-        <Text>{currentPage + 1}</Text>
+        <Text>
+          {currentPage + 1}/
+          {Math.round(+racers?.MRData?.total / RACERS_PER_PAGE)}
+        </Text>
 
         <Button
+          disabled={
+            currentPage + 1 ===
+            Math.round(+racers?.MRData?.total / RACERS_PER_PAGE)
+          }
           title="Next"
           onPress={() => {
             setCurrentPage(prev => prev + 1);
@@ -98,6 +107,9 @@ const styles = StyleSheet.create({
     padding: 16,
     overflow: 'hidden',
     flex: 1,
+  },
+  list: {
+    marginVertical: 16,
   },
   listItem: {
     display: 'flex',

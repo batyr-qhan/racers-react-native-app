@@ -40,7 +40,7 @@ const DetailsScreen = ({route}: Props) => {
 
   return (
     <View style={styles.container}>
-      <Text>
+      <Text style={styles.header}>
         {familyName} {givenName}
       </Text>
 
@@ -64,6 +64,10 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     flex: 1,
+  },
+  header: {
+    fontSize: 20,
+    marginBottom: 16,
   },
   listItem: {
     display: 'flex',

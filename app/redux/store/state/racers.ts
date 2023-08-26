@@ -1,7 +1,8 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axios from 'axios';
+import {RACERS_PER_PAGE} from '../../../constants';
 
-export interface RacerData {
+type RacerType = {
   driverId: number;
   familyName: string;
   givenName: string;
@@ -9,7 +10,16 @@ export interface RacerData {
   nationality: string;
   dateOfBirth: string;
   url: string;
-}
+};
+
+export type RacerDataType = {
+  MRData: {
+    DriverTable: {
+      Drivers: RacerType[];
+    };
+    total: string;
+  };
+};
 
 export interface RaceData {}
 
@@ -17,19 +27,17 @@ export const fetchRacers = createAsyncThunk(
   'racers/fetchRacers',
   async (offset: number) => {
     const response = await axios(
-      `https://ergast.com/api/f1/drivers.json?offset=${offset}&limit=10`,
+      `https://ergast.com/api/f1/drivers.json?offset=${offset}&limit=${RACERS_PER_PAGE}`,
     );
-    console.log(response.data.MRData.DriverTable.Drivers);
-    return response.data?.MRData?.DriverTable?.Drivers as RacerData[];
+    return response.data as RacerDataType;
   },
 );
 
 const racersSlice = createSlice({
   name: 'racers',
   initialState: {
-    racers: [] as RacerData[],
+    racers: {} as RacerDataType,
     loading: false,
-    // races: [] as {givenName: string}[],
   },
   reducers: {},
   extraReducers: builder => {
